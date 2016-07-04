@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour
 {
-
+	private Rect inventoryWindow;
 	InventorySlot[] slots = new InventorySlot[32];
+	bool openInventory;
 
 	public void Start ()
 	{
@@ -19,15 +20,13 @@ public class Inventory : MonoBehaviour
 	void Update ()
 	{
 		if (Input.GetKeyDown (KeyCode.I)) {
-
+			openInventory = !openInventory;
 		}
+	}
 
-		if (Input.GetMouseButtonDown (0)) {
-			/*RaycastHit hit = new RaycastHit ();
-			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-			GameObject something = GameObject.FindWithTag (ItemType.PickableItem.ToString ());
-			if (Physics.Raycast (ray, out hit, 100f)) {
-			}*/
+	void OnGUI(){
+		if (openInventory) {
+			GUI.Window (1, inventoryWindow,DrawInventoryWindow, "Inventory"); 
 		}
 	}
 
@@ -35,23 +34,23 @@ public class Inventory : MonoBehaviour
 	{
 		//Add Restrictions
 		InventorySlot slot = new InventorySlot ();
-		slot.addItem (item);
+//		slot.addItem (item);
 		//slots.Add (slot);
 	}
 
-	private void drawInventory ()
+	private void DrawInventoryWindow (int windowID)
 	{
-		foreach (InventorySlot slot in slots) {
-			GameObject cube =
-				Instantiate (Resources.Load ("Cube"),
-					new Vector2 (1, 1),
-					Quaternion.identity) as GameObject;
-
-			if (slot != null && slot.getItem () != null) {
-				cube.GetComponent <ItemPreview> ().setItem (slot.getItem ());
-			}
-			cube.transform.parent = gameObject.transform;
-		}
+//		foreach (InventorySlot slot in slots) {
+//			GameObject cube =
+//				Instantiate (Resources.Load ("Cube"),
+//					new Vector2 (1, 1),
+//					Quaternion.identity) as GameObject;
+//
+//			if (slot != null && slot.getItem () != null) {
+//				cube.GetComponent <ItemPreview> ().setItem (slot.getItem ());
+//			}
+//			cube.transform.parent = gameObject.transform;
+//		}
 	}
 
 }

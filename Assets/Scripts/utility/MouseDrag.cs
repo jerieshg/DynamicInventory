@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MouseDrag : MonoBehaviour
 {
-	public Vector3 originalPosition;
+	private Vector3 originalPosition;
 	private bool dragging;
 
 	void Start ()

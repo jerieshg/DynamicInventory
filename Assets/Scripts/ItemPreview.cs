@@ -19,7 +19,7 @@ public class ItemPreview : MonoBehaviour
 
 	void OnMouseEnter ()
 	{
-		print (item.getName ());
+//		print (item.getName ());
 	}
 
 	public void setItem (Item item)

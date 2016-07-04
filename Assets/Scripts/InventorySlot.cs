@@ -1,18 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class InventorySlot : MonoBehaviour {
+public class InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler {
 
-	private Item item;
+	public Item item;
+	private Image itemImage;	
 
-	public void addItem(Item item){
-		this.item = item;
+
+
+	void Start(){
+		itemImage = gameObject.transform.GetChild (0).GetComponent <Image> ();
 	}
 
-	public Item getItem(){
-		return item;
+	void Update(){
+		if (item != null) {
+			itemImage.enabled = true;
+			itemImage.sprite = item.icon;
+		} else {
+			itemImage.enabled = false;
+		}
 	}
 
+	public void OnPointerDown(PointerEventData data){
+		print (gameObject.transform.name);
+	}
+
+	public void OnPointerEnter(PointerEventData data){
+		print (gameObject.transform.name);
+	}
 
 }
