@@ -3,5 +3,12 @@ using System.Collections;
 
 public enum ItemType
 {
-	PickableItem
+	Head,
+	Chest,
+	Legs,
+	Hands,
+	Boots,
+	Weapon,
+	Consumable,
+	Quest
 }

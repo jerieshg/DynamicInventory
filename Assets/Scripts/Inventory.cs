@@ -1,56 +1,76 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Security.Principal;
 using System.Collections.Generic;
 
-public class Inventory : MonoBehaviour
-{
-	private Rect inventoryWindow;
-	InventorySlot[] slots = new InventorySlot[32];
-	bool openInventory;
+public class Inventory : MonoBehaviour {
 
-	public void Start ()
-	{
-		/*Item item = new Item ();
-		item.setId (1);
-		item.setName ("Test Item");
-		item.setDescription ("This is an item to test");
-		addItem (item);*/
+	public List<GameObject> slots = new List<GameObject>();
+	public List<Item> items = new List<Item>();
+	public GameObject slotPrefab;
+	public GameObject toolTip;
+	public GameObject draggedItemPrefab;
+	public bool isDragging;
+
+	private ItemDatabase itemDatabase;
+	private int x = 35;
+	private int y = 150;
+
+	void Start () {
+
+		itemDatabase = GameObject.FindGameObjectWithTag ("ItemDatabase").GetComponent <ItemDatabase> ();
+
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 6; j++) {
+				
+				GameObject slot = (GameObject) Instantiate (slotPrefab);
+				slot.GetComponent <InventorySlot>().slotNumber = slots.Count;
+				slot.transform.SetParent (this.gameObject.transform);
+				slot.name = "Slot " + ((i+1) +"."+ (j+1));
+				slot.tag = "Placeholder";
+				slot.GetComponent<RectTransform>().localPosition = new Vector3(x,y,0);
+				slots.Add (slot);
+				items.Add (new Item());
+				x += 55;
+				if (j == 5) {
+					x = 35;
+					y -= 55;
+				}
+			}
+		}
+
+		addItem (1);
+		addItem (2);
 	}
 
-	void Update ()
-	{
-		if (Input.GetKeyDown (KeyCode.I)) {
-			openInventory = !openInventory;
+	void Update(){
+	
+		if (isDragging) {
+			Vector3 position = (Input.mousePosition - GameObject.FindGameObjectWithTag ("Canvas").GetComponent<RectTransform> ().localPosition);
+			draggedItemPrefab.GetComponent<RectTransform> ().localPosition = new Vector3(position.x + 15, position.y - 15, position.z);
 		}
 	}
 
-	void OnGUI(){
-		if (openInventory) {
-			GUI.Window (1, inventoryWindow,DrawInventoryWindow, "Inventory"); 
+	public void addItem(int id){
+		foreach (Item item in itemDatabase.items) {
+			if (item.id == id) {
+				addItem (item);
+				break;
+			}
 		}
 	}
 
-	public void addItem (Item item)
-	{
-		//Add Restrictions
-		InventorySlot slot = new InventorySlot ();
-//		slot.addItem (item);
-		//slots.Add (slot);
+	public void addItem(Item item){
+		for(int i = 0;i<items.Count;i++){
+			if (items[i].name == null) {
+				items [i] = item;
+				break;
+			}
+		}
 	}
 
-	private void DrawInventoryWindow (int windowID)
-	{
-//		foreach (InventorySlot slot in slots) {
-//			GameObject cube =
-//				Instantiate (Resources.Load ("Cube"),
-//					new Vector2 (1, 1),
-//					Quaternion.identity) as GameObject;
-//
-//			if (slot != null && slot.getItem () != null) {
-//				cube.GetComponent <ItemPreview> ().setItem (slot.getItem ());
-//			}
-//			cube.transform.parent = gameObject.transform;
-//		}
-	}
-
+//	public void showToolTip(Vector3 position, Item item){
+//		toolTip.SetActive (true);
+//		toolTip.GetComponent <RectTransform>().localPosition = new Vector3(position.x - 445, position.y, position.z);
+//	}
 }
