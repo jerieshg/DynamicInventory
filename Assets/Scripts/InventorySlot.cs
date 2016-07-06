@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Runtime.InteropServices;
 
 public class InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler,IPointerExitHandler, IDragHandler {
 
@@ -10,17 +11,26 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
 	public int slotNumber;
 	private Image itemImage;
 	private Inventory inventory;
+	private Text itemText;
 
 	void Start(){
 		itemImage = gameObject.transform.GetChild (0).GetComponent <Image> ();
+		itemText = gameObject.transform.GetChild (1).GetComponent <Text> ();
 		inventory = GameObject.FindGameObjectWithTag ("Inventory").GetComponent <Inventory> ();
+
 	}
 
 	void Update(){
 		item = inventory.items [slotNumber];
+
 		if (item.name != null) {
+			itemText.enabled = false;
 			itemImage.enabled = true;
 			itemImage.sprite = item.icon;
+			if (item.itemType.Equals (ItemType.Consumable)) {
+				itemText.enabled = true;
+				itemText.text = ""+item.itemValue;
+			}
 		} else {
 			itemImage.enabled = false;
 		}
@@ -65,6 +75,7 @@ public class InventorySlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHa
 			inventory.items [slotNumber] = new Item ();
 			inventory.toolTip.SetActive (false);
 			inventory.isDragging = true;
+			itemText.enabled = false;
 		}
 	}
 

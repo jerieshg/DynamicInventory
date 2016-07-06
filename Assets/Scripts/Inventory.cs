@@ -41,6 +41,8 @@ public class Inventory : MonoBehaviour {
 
 		addItem (1);
 		addItem (2);
+		addItem (3);
+		addItem (3);
 	}
 
 	void Update(){
@@ -54,7 +56,16 @@ public class Inventory : MonoBehaviour {
 	public void addItem(int id){
 		foreach (Item item in itemDatabase.items) {
 			if (item.id == id) {
-				addItem (item);
+				if (item.itemType == ItemType.Consumable) {
+					//Check if there's another consumable in there
+					if (!checkIfItemExists (id)) {
+						addItem (item);
+					}
+				} else {
+					//Add item to free slot
+					addItem (item);
+				}
+
 				break;
 			}
 		}
@@ -67,6 +78,18 @@ public class Inventory : MonoBehaviour {
 				break;
 			}
 		}
+	}
+
+	private bool checkIfItemExists(int itemId){
+
+		foreach (Item e in items) {
+			if (e.id == itemId) {
+				e.itemValue++;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 //	public void showToolTip(Vector3 position, Item item){
